@@ -30,6 +30,16 @@ const client = new MongoClient(uri, {
       // Connect the client to the server	(optional starting in v4.7)
       
       // Send a ping to confirm a successful connection
+
+
+
+
+
+      app.get('/countries', async (req, res) => {
+        const cursor = countryCollection.find();
+        const result = await cursor.toArray();
+        res.send(result);
+      })
       await client.db("admin").command({ ping: 1 });
       console.log("Pinged your deployment. You successfully connected to MongoDB!");
     } finally {
