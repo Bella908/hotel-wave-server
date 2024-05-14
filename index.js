@@ -72,6 +72,14 @@ const client = new MongoClient(uri, {
       })
 
 
+      app.get('/room/:email', async (req, res) => {
+        const email = req.params.email
+        const query = {email:email}
+        const result = await bookingCollection .findOne(query);
+        res.send(result);
+      })
+
+
       await client.db("admin").command({ ping: 1 });
       console.log("Pinged your deployment. You successfully connected to MongoDB!");
     } finally {
