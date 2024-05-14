@@ -82,9 +82,21 @@ const client = new MongoClient(uri, {
 
       app.get('/myBooking', async (req, res) => {
       console.log(req.query.email);
+      let query ={};
+      if(req.query?.email){
+        query ={email: req.query.email}
+      }
         const result = await bookingCollection .find().toArray();
         res.send(result);
       })
+
+
+      app.delete("/myBooking/delete/:_id", async (req, res) => {
+        const result = await bookingCollection.deleteOne({ _id: new ObjectId(req.params._id) });
+  
+        res.send(result)
+      })
+
 
 
       await client.db("admin").command({ ping: 1 });
