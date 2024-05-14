@@ -80,10 +80,9 @@ const client = new MongoClient(uri, {
       })
 
 
-      app.get('/room/:email', async (req, res) => {
-        const email = req.params.email
-        const query = {email:email}
-        const result = await bookingCollection .findOne(query);
+      app.get('/myBooking', async (req, res) => {
+      console.log(req.query.email);
+        const result = await bookingCollection .find().toArray();
         res.send(result);
       })
 
