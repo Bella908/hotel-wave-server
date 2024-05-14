@@ -34,11 +34,19 @@ const client = new MongoClient(uri, {
       const roomsCollection = client.db('hotelWave').collection('rooms');
       const bookingCollection = client.db('hotelWave').collection('booking');
       const reviewCollection = client.db('hotelWave').collection('review');
+      const featureCollection = client.db('hotelWave').collection('featureRoom');
 
 
 
       app.get('/rooms', async (req, res) => {
         const cursor = roomsCollection.find();
+        const result = await cursor.toArray();
+        res.send(result);
+      })
+     
+     
+      app.get('/feature', async (req, res) => {
+        const cursor = featureCollection.find();
         const result = await cursor.toArray();
         res.send(result);
       })
