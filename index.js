@@ -31,15 +31,47 @@ const client = new MongoClient(uri, {
       
       // Send a ping to confirm a successful connection
 
+      const roomsCollection = client.db('hotelWave').collection('rooms');
+      const bookingCollection = client.db('hotelWave').collection('booking');
+      const reviewCollection = client.db('hotelWave').collection('review');
 
 
 
-
-      app.get('/countries', async (req, res) => {
-        const cursor = countryCollection.find();
+      app.get('/rooms', async (req, res) => {
+        const cursor = roomsCollection.find();
         const result = await cursor.toArray();
         res.send(result);
       })
+
+
+      app.post('/booking', async (req, res) => {
+        const bookingData = req.body;
+        const result = await bookingCollection.insertOne( bookingData );
+        res.send(result);
+      })
+      
+      
+      app.post('/review', async (req, res) => {
+        const bookingData = req.body;
+        const result = await  reviewCollection.insertOne( bookingData );
+        res.send(result);
+      })
+      
+      // Assuming you have an Express.js route handler for handling review submissions
+
+
+      
+      
+
+      
+      app.get('/rooms/:id', async (req, res) => {
+        const id = req.params.id
+        const query = {_id: new ObjectId(id)}
+        const result = await  roomsCollection.findOne(query);
+        res.send(result);
+      })
+
+
       await client.db("admin").command({ ping: 1 });
       console.log("Pinged your deployment. You successfully connected to MongoDB!");
     } finally {
