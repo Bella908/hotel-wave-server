@@ -64,6 +64,18 @@ const client = new MongoClient(uri, {
         const result = await  reviewCollection.insertOne( bookingData );
         res.send(result);
       })
+
+      app.get('/review', async (req, res) => {
+        console.log(req.query.roomId);
+        let query ={};
+        if(req.query?.roomId){
+          query ={roomId: req.query.roomId}
+        }
+          const result = await reviewCollection .find().toArray();
+          res.send(result);
+      })
+
+  
       
       // Assuming you have an Express.js route handler for handling review submissions
 
@@ -97,6 +109,42 @@ const client = new MongoClient(uri, {
         res.send(result)
       })
 
+
+
+
+      app.put("/myBooking/update/:_id", async (req, res) => {
+        const id = req.params._id; // Use "_id" here
+        const filter = { _id: new ObjectId(id) };
+        const updatedBooking = req.body;
+        console.log(updatedBooking);
+        const updateDoc = {
+            $set: {
+                status: updatedBooking.status
+            },
+        };
+        try {
+            const result = await bookingCollection.updateOne(filter, updateDoc);
+            res.send(result);
+        } catch (error) {
+            console.error("Error occurred during update:", error);
+            res.status(500).json({ error: "An error occurred during update" });
+        }
+    });
+
+    app.put("/myBooking/update/:_id", async (req, res) => {
+      const id = req.params._id;
+      const filter = { _id: new ObjectId(id) };
+      const updatedFields = { $set: { deadline: req.body.deadline } }; // Only update the deadline field
+      try {
+          const result = await bookingCollection.updateOne(filter, updatedFields);
+          res.send(result);
+      } catch (error) {
+          console.error("Error occurred during update:", error);
+          res.status(500).json({ error: "An error occurred during update" });
+      }
+  });
+  
+    
 
 
       await client.db("admin").command({ ping: 1 });
