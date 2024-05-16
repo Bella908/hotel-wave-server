@@ -141,13 +141,12 @@ async function run() {
     })
 
 
-    app.get('/myBooking', async (req, res) => {
-      console.log(req.query.email);
-      let query = {};
-      if (req.query?.email) {
-        query = { email: req.query.email }
-      }
-      const result = await bookingCollection.find().toArray();
+   
+    app.get("/myBooking/:email", async (req, res) => {
+      // const newSpot = req.body;
+      
+      const result = await bookingCollection .find({ email: req.params.email }).toArray();
+      // const result = await spotCollection.insertOne(newSpot);
       res.send(result);
     })
 
